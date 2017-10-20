@@ -1,0 +1,89 @@
+<!DOCTYPE html> 
+<html  lang="en">
+<head>
+	<title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
+    <script src="js/jquery-2.2.2.js"></script>
+    <script src="js/jquery.mobile-1.4.5.min.js"></script>	
+    <style type="text/css">
+         a{
+         	text-decoration: none;
+         }
+         #pageone{
+           background: transparent url(images/9.jpg) 0 0 no-repeat;
+           background-size: 100%;
+         }
+         #c{
+          margin-top: 100px;
+         }
+         #info{
+            right: 0;
+            color: red;
+         }
+    </style>
+</head>
+
+<body>
+   <div data-role="page" id="pageone">
+      <div data-role="header">
+            <h1>登录</h1>        
+       </div>   
+      <div data-role="content" id="c">
+          <div style="text-align: center;"><img src="images/3.jpg" style="width: 160px;height: 160px;text-align: center;border-radius: 80px";></div>
+          <div data-role="filedcontain">
+            账号： <input type="text" placeholder= "账号：" id="account"></input>
+          </div>
+          <div data-role="filedcontain">
+             密码：<input type="password" placeholder="密码："id='password'></input>
+          </div>       
+          <div id="info"></div>
+          </br>             
+          <div>
+             <input type="submit" value="登录" id="login" style="background-color: blue"></input>
+          </div>
+          <div><a href="#"  id="zhuce" style="font-size: 20px;">注册新用户</a></div>
+      </div>
+   </div>   
+</body> 
+
+<script type="text/javascript">
+    var zhuce=document.getElementById('zhuce');
+    zhuce.onclick=function(){
+      window.location="qqzhuce.html";
+    }
+   var login=document.getElementById('login');
+   var info=document.getElementById('info');
+   $('#login').click(function(){
+    $.ajax({
+      type:'get',
+      url:'http://datainfo.duapp.com/shopdata/userinfo.php',
+      data:{status:'login',userID:account.value,password:password.value},
+      dataType:'json',
+      success:function(data){
+         console.log(data); 
+          if (account.value==""||password.value=="") {
+            info.innerHTML="请输入用户名和密码"; 
+          }
+         else{
+              switch(data){
+                case 2:  
+                   info.innerHTML="用户名和密码不符";        
+                   break;
+                case 0:
+                   info.innerHTML="用户名不存在";     
+                   break; 
+                default:                  
+                    window.location="qq.html";            
+                    break;
+               }   
+       }                 
+      },
+      error:function(){   
+             alert('error');          
+      }       
+    })
+  })
+</script>
+</html>

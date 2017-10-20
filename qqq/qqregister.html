@@ -1,0 +1,110 @@
+<!DOCTYPE html> 
+<html  lang="en">
+<head>
+	<title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
+    <script src="js/jquery-2.2.2.js"></script>
+    <script src="js/jquery.mobile-1.4.5.min.js"></script>	
+    <style type="text/css">
+       #co{
+        margin-top: 150px;
+       }
+         #pageone{
+         background: transparent url(images/9.jpg) 0 0 no-repeat;
+         background-size: 100%;
+         }       
+         #info{
+          color: red;
+          font-size: 20px;
+         }
+    </style>
+</head>
+
+<body>
+   <div data-role="page" id="pageone">
+       <div data-role="header">
+            <h1>注册账户</h1>        
+       </div>      
+      <div data-role="content" id="co">
+          <div data-role="filedcontain">
+            用户名： <input type="text" placeholder="用户名：" id="yonghuming" onblur="warn();"></input>
+          </div><div id="yh" style="color: red"></div>
+          <div data-role="filedcontain">
+             密码：<input type="password" placeholder= "密码：" id="password" onblur="warn();"></input>
+          </div><div id="ps" style="color: red"></div>    
+          <div data-role="filedcontain">
+             确认密码：<input type="password" placeholder ="确认密码：" id="repassword" onblur="confirmpw()"></input>
+          </div><div id="rep" style="color: red"></div>     
+          </br>              
+          <div>
+             <input type="submit" value="注册账户" id="commit" style="background-color: blue"></input>
+          </div>
+          <div id="info"></div>
+      </div>
+   </div>   
+</body> 
+<script type="text/javascript">
+      var commit=document.getElementById('commit');
+      var yonghuming=document.getElementById('yonghuming');
+      var password=document.getElementById('password');
+      var repassword=document.getElementById('repassword');
+      var yh=document.getElementById('yh');
+      var ps=document.getElementById('ps');
+      var rep=document.getElementById('rep');
+      var info=document.getElementById('info');
+
+
+  function warn(){
+          if (yonghuming.value!="") {
+                yh.innerHTML="";
+                if (password.value.length>=6) {
+                    ps.innerHTML='';
+                } else ps.innerHTML="密码位数不能少于6位";
+            }else  yh.innerHTML='用户名不能为空';
+          }
+   function confirmpw(){
+       if (password.value!="") {
+           if (repassword.value!=""&&password.value!=repassword.value) {
+                     rep.innerHTML="您两次输入的密码不一致";
+            } 
+           else rep.innerHTML='';
+       }
+    }
+  $('#commit').click(function(){
+        if (yonghuming.value==''||password.value==''||repassword=='') {
+            info.innerHTML="用户名和密码不能为空";
+        }else{
+              info.innerHTML="";
+          if (rep.innerHTML!="") {
+            confirmpw();           
+          }else{
+              $.ajax({
+                type:'get',
+                url:'http://datainfo.duapp.com/shopdata/userinfo.php',
+                data:{status:'register',userID:yonghuming.value,password:password.value},
+                dataType:'json',
+                success:function(data){
+                  console.log(data);
+                   switch(data){
+                    case 1:
+                       alert('注册成功，点击确定后自动跳转到登录页面');
+                       window.location="qqdenglu.html";          
+                       break;
+                    case 0:
+                       alert('用户名已经注册');
+                       break;
+                    default:
+                        break;
+                 }
+                },
+                error:function(){
+                  alert('error');
+                }
+            })
+    }
+  }
+})
+</script>
+</html>
